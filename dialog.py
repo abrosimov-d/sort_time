@@ -8,7 +8,7 @@ class Dialog():
         self.BG3 = '#1a1c23'
         self.BG2 = '#36383e'
         self.FG = '#bfc0c2'
-        self.FF = 'Consolas'
+        self.FF = 'Monaco'
 
         self.SIZES = [
             {'name': 'S', 'WIDTH': 40, 'geometry': '600x160'},
@@ -54,14 +54,14 @@ class Dialog():
                             self.root.geometry(size['geometry'])
                     
                 case 'button':
-                    element['object'] = tk.Button(self.root, text=element['text'], width=self.WIDTH, command=lambda id=element['id']:self.on_event_click(id), bg=self.BG3, fg=self.FG, relief="solid", bd=0, cursor='hand2')
+                    element['object'] = tk.Button(self.root, text=element['text'], width=self.WIDTH, command=lambda id=element['id']:self.on_event_click(id), bg=self.BG3, fg=self.FG, relief="flat", bd=0, cursor='hand2')
                     element['object'] .bind("<Enter>", self.on_enter) 
                     element['object'] .bind("<Leave>", self.on_leave)
                 case 'input':
-                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="solid", bd=0)
+                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=-1)
                     element['object'].bind("<Key>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'password':
-                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="solid", bd=0, show='*')
+                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=0, show='*')
                     element['object'].bind("<Key>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'separator':
                     element['object'] = tk.Frame(self.root, width=self.WIDTH, bg=self.BG)
