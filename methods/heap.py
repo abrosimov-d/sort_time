@@ -1,3 +1,14 @@
+class Heap():
+    def __init__(self):
+        self.__name = 'heap'
+        pass
+
+    def get_name(self):
+        return self.__name
+
+    def sort(self, arr):
+        return heap_sort(arr)
+
 def heapify(arr, n, i):
     largest = i
     left = 2 * i + 1

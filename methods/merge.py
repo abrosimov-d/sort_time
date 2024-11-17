@@ -1,3 +1,14 @@
+class Merge():
+    def __init__(self):
+        self.__name = 'merge'
+        pass
+
+    def get_name(self):
+        return self.__name
+
+    def sort(self, arr):
+        return merge_sort(arr)
+
 def merge_sort(arr):
     if len(arr) > 1:
         mid = len(arr) // 2

@@ -1,5 +1,6 @@
 from sortdialog import SortDialog
 from sort import Sort
+from duration import Duration
 
 class App():
     def __init__(self):
@@ -8,19 +9,20 @@ class App():
 
     def run(self):
         self.sort_dialog.run()
-        pass
 
     def on_sort_listener(self, data):
-        print(data)
-
-        if 'array' not in data:
-            data = self.sort.generate_random_array(data, 10)
-            return data
-
-        if 'method' in data:
-            data = self.sort.check(data)
-            data = self.sort.run(data)
-        else:
-            data = self.sort.check(data)
-            print(data)
+        try:
+            if 'array' not in data:
+                data = self.sort.generate_random_array(data, 1000)
+            elif 'method' in data:
+                data = self.sort.check(data)
+                duration = Duration()
+                duration.start()
+                data = self.sort.run(data)
+                data['duration'] = duration.stop()
+                data = self.sort.finish(data)
+            else:
+                data = self.sort.check(data)
+        except Exception as err:
+            data['error'] = f'{err}'
         return data

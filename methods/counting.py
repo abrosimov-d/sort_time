@@ -1,3 +1,14 @@
+class Counting():
+    def __init__(self):
+        self.__name = 'counting'
+        pass
+
+    def get_name(self):
+        return self.__name
+
+    def sort(self, arr):
+        return counting_sort(arr)
+
 def counting_sort(arr):
     max_val = max(arr)
     count = [0] * (max_val + 1)

@@ -1,3 +1,14 @@
+class Quick():
+    def __init__(self):
+        self.__name = 'quick'
+        pass
+
+    def get_name(self):
+        return self.__name
+
+    def sort(self, arr):
+        return quick_sort(arr)
+
 def quick_sort(arr):
     if len(arr) <= 1:
         return arr

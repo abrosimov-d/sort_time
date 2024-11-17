@@ -8,13 +8,13 @@ class Dialog():
         self.BG3 = '#1a1c23'
         self.BG2 = '#36383e'
         self.FG = '#bfc0c2'
-        self.FF = 'Monaco'
+        self.FF = 'Consolas'
 
         self.SIZES = [
             {'name': 'S', 'WIDTH': 40, 'geometry': '600x160'},
             {'name': 'L', 'WIDTH': 25, 'geometry': '400x200'},
             {'name': 'XL', 'WIDTH': 25, 'geometry': '400x400'},
-            {'name': 'XXL', 'WIDTH': 40, 'geometry': '800x700'},
+            {'name': 'XXL', 'WIDTH': 40, 'geometry': '800x650'},
             {'name': 'XXXL', 'WIDTH': 60, 'geometry': '1400x800'},
             #{'name': 'XL', 'WIDTH': 25, 'geometry': '800x800'},
         ]
@@ -95,7 +95,6 @@ class Dialog():
                     element['object'] = ttk.Combobox(self.root, width=self.WIDTH, values=element['values'], state='readonly', cursor='hand2')
                     element['object'].set(element['values'][0])
                     element['object'].bind("<<ComboboxSelected>>", lambda e=element['object']:element['object'].selection_clear())
-                    print(element['object'])
                 #case 'image':
                     #image = Image.open('.\\assets\\error.png')
                     #image = tk.PhotoImage(image)
@@ -158,3 +157,7 @@ class Dialog():
     def get_selected_index_by_id(self, id):
         element = self.get_element_by_id(id)
         return element['object'].current()
+
+    def set_enable_by_id(self, id, enable):
+        element = self.get_element_by_id(id)
+        element['object'].config(state = tk.NORMAL if enable else tk.DISABLED)
