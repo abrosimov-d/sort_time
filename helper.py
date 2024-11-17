@@ -22,3 +22,7 @@ class Helper():
     @staticmethod
     def random_id():
         return randint(100000000, 900000000)
+    
+    @staticmethod
+    def random_999():
+        return randint(100, 999)

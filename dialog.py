@@ -14,7 +14,7 @@ class Dialog():
             {'name': 'S', 'WIDTH': 40, 'geometry': '600x160'},
             {'name': 'L', 'WIDTH': 25, 'geometry': '400x200'},
             {'name': 'XL', 'WIDTH': 25, 'geometry': '400x400'},
-            {'name': 'XXL', 'WIDTH': 40, 'geometry': '800x600'},
+            {'name': 'XXL', 'WIDTH': 40, 'geometry': '800x700'},
             {'name': 'XXXL', 'WIDTH': 60, 'geometry': '1400x800'},
             #{'name': 'XL', 'WIDTH': 25, 'geometry': '800x800'},
         ]
@@ -59,10 +59,10 @@ class Dialog():
                     element['object'] .bind("<Leave>", self.on_leave)
                 case 'input':
                     element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=-1)
-                    element['object'].bind("<Key>", lambda key, id=element['id']: self.on_event_key(key, id))
+                    element['object'].bind("<KeyRelease>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'password':
                     element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=0, show='*')
-                    element['object'].bind("<Key>", lambda key, id=element['id']: self.on_event_key(key, id))
+                    element['object'].bind("<KeyRelease>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'separator':
                     element['object'] = tk.Frame(self.root, width=self.WIDTH, bg=self.BG)
                 case 'label':
@@ -154,3 +154,7 @@ class Dialog():
 
     def on_leave(self, event):
         event.widget.config(bg=self.BG3)
+
+    def get_selected_index_by_id(self, id):
+        element = self.get_element_by_id(id)
+        return element['object'].current()
