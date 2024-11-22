@@ -13,41 +13,41 @@ ID_LABEL_DURATION = Helper.random_id()
 
 class SortDialog(Dialog):
     """
-    Класс для создания диалогового окна сортировки с использованием tkinter.
+    Class for create tkinter dialog 
 
-    Атрибуты:
+    attributes:
     ----------
     on_sort_listener : function
-        Функция-обработчик, вызываемая при выполнении сортировки.
+        Sort listener
     methods : list
-        Список методов сортировки.
+        Methods list
     orders : list
-        Список порядков сортировки.
+        Order array lists
 
-    Методы:
+    methods:
     -------
     __init__(self, on_sort_listener, methods, orders):
-        Инициализация класса SortDialog с заданной функцией-обработчиком и списками методов и порядков сортировки.
+        init SortDialog
         
     run(self):
-        Запускает основное диалоговое окно сортировки.
+        run SortDialog
         
     __event_listener(self, event, id, event_data):
-        Обрабатывает события интерфейса (нажатия кнопок, ввод данных и т.д.).
+        process dialog events (click, key)
     """
     
     def __init__(self, on_sort_listener, methods, orders):
         """
-        Инициализирует класс SortDialog, создавая шаблон диалогового окна с указанными параметрами.
+        init SortDialog
 
-        Параметры:
+        params:
         ----------
         on_sort_listener : function
-            Функция-обработчик, вызываемая при выполнении сортировки.
+            Sort Listener
         methods : list
-            Список методов сортировки.
+            Methods list
         orders : list
-            Список порядков сортировки.
+            Order array lists
         """
         super().__init__()
         self.on_sort_listener = on_sort_listener 
@@ -81,27 +81,27 @@ class SortDialog(Dialog):
 
     def run(self):
         """
-        Запускает основное диалоговое окно сортировки.
+        run SortDialog
         """
         super().run()
     
     def __event_listener(self, event, id, event_data):
         """
-        Обрабатывает события интерфейса (нажатия кнопок, ввод данных и т.д.).
+        process dialog events (click, key)
 
-        Параметры:
+        params:
         ----------
         event : str
-            Тип события (например, 'click', 'key', 'close').
+            event (click, key, close)
         id : int
-            Идентификатор элемента интерфейса, вызвавшего событие.
+            id element
         event_data : dict
-            Дополнительные данные события.
+            data for event
 
-        Возвращает:
+        return:
         ----------
         bool
-            True, если событие 'close' успешно обработано.
+            True if close was processed
         """
         
         if event =='click' and id == ID_BUTTON_START:

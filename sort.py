@@ -9,53 +9,53 @@ from helper import Helper
 
 class Sort():
     """
-    Класс для выполнения различных методов сортировки.
+    class for sort execution
 
-    Атрибуты:
+    attributes:
     ----------
     __orders : tuple
-        Кортеж, содержащий возможные порядки сортировки ('min -> max', 'max -> min').
+        tuple for order array methods
     __methods : list
-        Список экземпляров классов сортировки.
+        list of instance sort methods
 
-    Методы:
+    methods:
     -------
     __init__(self):
-        Инициализация класса Sort с созданием списка методов сортировки.
+        init Sort class
         
     get_methods(self):
-        Возвращает имена доступных методов сортировки.
+        return sort methods names
         
     get_orders(self):
-        Возвращает возможные порядки сортировки.
+        return order array methods
         
     check(self, data):
-        Проверяет и преобразует строку массива в список чисел.
+        validate array string
         
     generate_random_array(self, data, size):
-        Генерирует случайный массив заданного размера и сохраняет его в строку.
+        genarate random array string with size
         
     string_to_array(self, string):
-        Преобразует строку массива в список чисел.
+        convert array to string
         
     array_to_string(self, array):
-        Преобразует список чисел в строку.
+        convert string to array
         
     run(self, data):
-        Выполняет сортировку массива выбранным методом.
+        run sort only (without reverse and converting to string)
         
     finish(self, data):
-        Завершает сортировку, задает порядок и преобразует массив в строку.
+        finish: revers array if need, converting to string
     """
     
     def __init__(self):
         """
-        Инициализирует класс Sort.
+        init Sort class
 
-        Методы:
+        methods:
         -------
         Bubble, Counting, Heap, Merge, Quick, Radix:
-            Классы методов сортировки, которые будут использоваться.
+            methods for sort
         """
         self.__orders = ('min -> max', 'max -> min')
         self.__methods = []
@@ -67,37 +67,37 @@ class Sort():
         """
         Возвращает имена доступных методов сортировки.
 
-        Возвращает:
+        return:
         ----------
-        generator
-            Генератор, возвращающий имена методов сортировки.
+        list
+            list names of sort methods
         """
         return (m.get_name() for m in self.__methods)
 
     def get_orders(self):
         """
-        Возвращает возможные порядки сортировки.
+        return array orders
 
-        Возвращает:
+        return:
         ----------
         tuple
-            Кортеж с порядками сортировки ('min -> max', 'max -> min').
+            tuple array orders
         """
         return self.__orders
 
     def check(self, data):
         """
-        Проверяет и преобразует строку массива в список чисел.
+        validate array string
 
-        Параметры:
+        params:
         ----------
         data : dict
-            Данные для проверки, содержащие строку массива.
+            data for validate
 
-        Возвращает:
+        return:
         ----------
         dict
-            Обработанные данные с преобразованным массивом или сообщением об ошибке.
+            validated data or error message
         """
         try:
             data['array'] = self.string_to_array(data['array'])
@@ -107,36 +107,36 @@ class Sort():
 
     def generate_random_array(self, data, size):
         """
-        Генерирует случайный массив заданного размера и сохраняет его в строку.
+        genarate random array string with size
 
-        Параметры:
+        params:
         ----------
         data : dict
-            Данные для обновления с новым массивом.
+            data for generated array
         size : int
-            Размер генерируемого массива.
+            size ganerated array
 
-        Возвращает:
+        return:
         ----------
         dict
-            Обновленные данные с новым случайным массивом.
+            generated array
         """
         data['array'] = self.array_to_string([Helper.random_999() for _ in range(size)])
         return data
 
     def string_to_array(self, string):
         """
-        Преобразует строку массива в список чисел.
+        convert string to array
 
-        Параметры:
+        params:
         ----------
         string : str
-            Строка, представляющая массив.
+            string with array
 
-        Возвращает:
+        return:
         ----------
         list
-            Список чисел, полученных из строки.
+            array of ints
         """
         result = []
         elements = string.split(',')
@@ -146,17 +146,17 @@ class Sort():
         
     def array_to_string(self, array):
         """
-        Преобразует список чисел в строку.
+        convert array ints to string
 
-        Параметры:
+        params:
         ----------
         array : list
-            Список чисел.
+            array ints.
 
-        Возвращает:
+        return:
         ----------
         str
-            Строка, представляющая массив чисел.
+            array string
         """
         return ','.join(str(element) for element in array)
 
