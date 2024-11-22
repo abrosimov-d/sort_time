@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from webbrowser import open
 
 class Dialog():
     def __init__(self):
@@ -28,6 +29,10 @@ class Dialog():
         self.root.option_add("*Font", self.FONT) 
         self.root.config(bg=self.BG)
         self.elements = []
+        self.notebook = None
+        self.toolbar = None
+        self.frame = self.root
+        self.root.protocol('WM_DELETE_WINDOW', self.on_closing)
 
     def template(self, template):
         lines = template.split('\n')
@@ -54,51 +59,80 @@ class Dialog():
                             self.root.geometry(size['geometry'])
                     
                 case 'button':
-                    element['object'] = tk.Button(self.root, text=element['text'], width=self.WIDTH, command=lambda id=element['id']:self.on_event_click(id), bg=self.BG3, fg=self.FG, relief="flat", bd=0, cursor='hand2')
+                    element['object'] = tk.Button(self.frame, text=element['text'], width=self.WIDTH, command=lambda id=element['id']:self.on_event_click(id), bg=self.BG3, fg=self.FG, relief="flat", bd=0, cursor='hand2')
+                    element['object'] .bind("<Enter>", self.on_enter) 
+                    element['object'] .bind("<Leave>", self.on_leave)
+                case 'urlbutton':
+                    element['object'] = tk.Button(self.frame, text=element['text'], width=self.WIDTH, command=lambda url=element['text']:open(url), bg=self.BG3, fg=self.FG, relief="flat", bd=0, cursor='hand2')
                     element['object'] .bind("<Enter>", self.on_enter) 
                     element['object'] .bind("<Leave>", self.on_leave)
                 case 'input':
-                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=-1)
+                    element['object'] = tk.Entry(self.frame, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=-1)
                     element['object'].bind("<KeyRelease>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'password':
-                    element['object'] = tk.Entry(self.root, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=0, show='*')
+                    element['object'] = tk.Entry(self.frame, text=element['text'], width=self.WIDTH, bg=self.BG2, fg=self.FG, relief="flat", bd=0, show='*')
                     element['object'].bind("<KeyRelease>", lambda key, id=element['id']: self.on_event_key(key, id))
                 case 'separator':
-                    element['object'] = tk.Frame(self.root, width=self.WIDTH, bg=self.BG)
+                    element['object'] = tk.Frame(self.frame, width=self.WIDTH, bg=self.BG)
                 case 'label':
-                    element['object'] = tk.Label(self.root, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG)
+                    element['object'] = tk.Label(self.frame, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG)
                 case 'xlabel':
-                    element['object'] = tk.Label(self.root, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG, font=self.XXLFONT)
+                    element['object'] = tk.Label(self.frame, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG, font=self.XXLFONT)
                 case 'slabel':
-                    element['object'] = tk.Label(self.root, text=element['text'], width=self.WIDTH+20, bg=self.BG, fg=self.FG, font=self.SMALLFONT)
+                    element['object'] = tk.Label(self.frame, text=element['text'], width=self.WIDTH+20, bg=self.BG, fg=self.FG, font=self.SMALLFONT)
                     pady = 0
                     ipady = 0
                 case 'treeview':
                     style = ttk.Style()
                     style.theme_use("default")
-                    style.configure("Treeview", background=self.BG, foreground=self.FG, fieldbackground=self.BG, font=self.SMALLFONT, rowheight=25, borderwidth=0, relief='flat')
-                    style.configure("Treeview.Heading", background=self.BG, foreground=self.FG, fieldbackground=self.BG2, relief='flat', rowheight=30, font=self.FONT)
-                    style.layout("Treeview", [ ("Treeview.field", {"sticky": "nswe", "border": "1", "children": [ ("Treeview.padding", {"sticky": "nswe", "children": [ ("Treeview.treearea", {"sticky": "nswe"}) ]}) ]}) ]) 
-                    style.configure("Treeview.treearea", background="lightblue")
-                    element['object'] = ttk.Treeview(self.root, show='headings')
-                    element['object']["columns"] = ([str(x) for x in range(1 + int(element['text']))])
+                    style.configure("Treeview", background=self.BG, foreground=self.FG, fieldbackground=self.BG, font=self.FF, rowheight=25, borderwidth=0, relief='flat')
+                    style.configure("Treeview.Heading", background=self.FG, foreground=self.BG, fieldbackground=self.BG2, relief='flat', rowheight=30, font=self.FONT)
+                    #style.layout("Treeview", [ ("Treeview.field", {"sticky": "nswe", "border": "1", "children": [ ("Treeview.padding", {"sticky": "nswe", "children": [ ("Treeview.treearea", {"sticky": "nswe"}) ]}) ]}) ]) 
+                    element['object'] = ttk.Treeview(self.frame, show='headings')
+                    element['object'].bind("<<TreeviewSelect>>", lambda event, id=element['id']: self.on_item_selected(event, id))
+                    element['object']["columns"] = element['values']
+                    for column in element['values']:
+                        element['object'].heading(column, text=column)
+                    
                     fill=tk.BOTH
                     expand = True
                 case 'header':
-                    element['object'] = tk.Label(self.root, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG, font=self.BIGFONT, anchor='w')
+                    element['object'] = tk.Label(self.frame, text=element['text'], width=self.WIDTH, bg=self.BG, fg=self.FG, font=self.BIGFONT, anchor='w')
                     anchor = 'w'
                 case 'combo':
                     style = ttk.Style()
                     style.theme_use("default")
                     style.configure("TCombobox", background=self.BG, foreground=self.FG, fieldbackground=self.BG2, font=self.FONT, rowheight=25, borderwidth=0, relief='flat')
                     style.map("TCombobox", fieldbackground=[("readonly", self.BG)], foreground=[("readonly", self.FG)], background=[("readonly", self.BG)])
-                    element['object'] = ttk.Combobox(self.root, width=self.WIDTH, values=element['values'], state='readonly', cursor='hand2')
+                    element['object'] = ttk.Combobox(self.frame, width=self.WIDTH, values=element['values'], state='readonly', cursor='hand2')
                     element['object'].set(element['values'][0])
-                    element['object'].bind("<<ComboboxSelected>>", lambda e=element['object']:element['object'].selection_clear())
+                    element['object'].bind("<<ComboboxSelected>>", lambda event, e=element['object']: e.selection_clear())
                 #case 'image':
                     #image = Image.open('.\\assets\\error.png')
                     #image = tk.PhotoImage(image)
                     #element['object'] = ttk.Label(self.root, image=image)
+                case 'tab':
+                    style = ttk.Style() 
+                    style.theme_use('default')
+                    style.configure('TNotebook', background=self.BG, fieldbackground=self.BG2, font=self.FF, relief='flat', borderwidth=0)
+                    style.layout('TNotebook.Tab', [])
+
+                    if self.toolbar == None:
+                        self.toolbar = tk.Frame(self.root, bg=self.BG)
+                        self.toolbar.pack(side=tk.LEFT, anchor='n', fill='x')
+
+                    button = tk.Button(self.toolbar, text=element['text'], font=self.BIGFONT, command=lambda id=int(element['values'][0]):self.on_toolbar_click(id), bg=self.BG3, fg=self.FG, relief="flat", bd=0, cursor='hand2')
+                    button.pack(side=tk.TOP, anchor='w',)
+                    button.bind("<Enter>", self.on_enter) 
+                    button.bind("<Leave>", self.on_leave)
+
+                    if self.notebook == None:
+                        self.notebook = ttk.Notebook(self.root, style='TNotebook')
+                        self.notebook.pack(fill='both', expand=True, anchor='e', side = tk.RIGHT)
+
+                    self.frame = tk.Frame(self.notebook, bg=self.BG, bd=0, relief='flat')
+                    self.frame.pack(fill='both')#, expand=True)
+                    self.notebook.add(self.frame, text='qwe')#, state='hidden')
 
                 case _:
                     pass
@@ -115,19 +149,24 @@ class Dialog():
     
     def set_data_to_treeview(self, id, data):
         tree = self.get_element_by_id(id)
+        for item in tree['object'].get_children(): 
+            tree['object'].delete(item)
         if tree != None:
             for item in data:
                 tree['object'].insert('', 'end', values=item)
 
     def on_event_click(self, id):
         self.event_listener('click', id, None)
+    
+    def on_toolbar_click(self, id):
+        self.set_active_tab(id)
 
     def on_event_key(self, event, id):
         element = self.get_element_by_id(id)
         element['text'] = element['object'].get()
         self.event_listener('key', id, event)
 
-    def set_event_listner(self, listener):
+    def set_event_listener(self, listener):
         self.event_listener = listener
 
     def get_text_by_id(self, id):
@@ -141,11 +180,17 @@ class Dialog():
 
         if element['type'] in ('label', 'xlabel', 'slabel'):
             element['object'].configure(text=text)
-        else:
+                
+        if element['type'] == 'input':
             element['object'].delete(0, tk.END)
             element['object'].insert(0, text)
+            self.event_listener('key', id, '')
+
+        if element['type'] == 'button':
+            element['object'].config(text=text)
 
     def run(self):
+        self.event_listener('init', 0, 0)
         self.root.mainloop()
 
     def on_enter(self, event):
@@ -161,3 +206,30 @@ class Dialog():
     def set_enable_by_id(self, id, enable):
         element = self.get_element_by_id(id)
         element['object'].config(state = tk.NORMAL if enable else tk.DISABLED)
+
+    def set_active_tab(self, index):
+        self.notebook.select(index)
+        self.event_listener('tab', index, 0)
+
+    def on_closing(self):
+        if self.event_listener('close', 0, 0):
+            self.root.destroy()
+
+    def on_item_selected(self, event, id):
+        element = self.get_element_by_id(id)
+        try:
+            selected = element['object'].selection()[0]
+            item = element['object'].item(selected, 'values')
+            self.event_listener('select', id, item)
+        except:
+            self.event_listener('select', id, None)
+            pass
+    
+    def get_item_selected(self, id):
+        element = self.get_element_by_id(id)
+        try:
+            selected = element['object'].selection()[0]
+            item = element['object'].item(selected, 'values')
+        except:
+            pass
+        return item
