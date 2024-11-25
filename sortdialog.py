@@ -73,7 +73,7 @@ class SortDialog(Dialog):
         xlabel, SORT_TIME, 0, 0
         label, assignment for python course, 0, 0
         label, used: tkinter, 0, 0 
-        label, date: XX.11.2024, 0, 0
+        label, date: 25.11.2024, 0, 0
         urlbutton, https://github.com/abrosimov-d/sort_time, 0, 0
         '''
         super().template(template)
