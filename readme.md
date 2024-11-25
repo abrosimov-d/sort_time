@@ -34,7 +34,7 @@
 1. Клонируйте репозиторий:
     ```sh
     git clone https://github.com/abrosimov-d/sort_time.git
-    cd SortTimerMaster
+    cd sort_time
     ```
 2. Запустите приложение:
     ```sh
